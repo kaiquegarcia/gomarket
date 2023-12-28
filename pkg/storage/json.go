@@ -12,6 +12,8 @@ type JsonStorage interface {
 	Read(path string, dest interface{}) error
 	// Write will try to encode {data} using json.Marshal and store it on "{PROGRAM_DIR}storage/{path}"
 	Write(path string, data interface{}) error
+	// Delete will try to delete the file stored on "{PROGRAM_DIR}storage/{path}"
+	Delete(path string) error
 }
 
 type jsonStorage struct {
@@ -45,4 +47,8 @@ func (js jsonStorage) Write(path string, data interface{}) error {
 	}
 
 	return os.WriteFile(js.basePath+path, bytes, os.ModePerm)
+}
+
+func (js jsonStorage) Delete(path string) error {
+	return os.Remove(js.basePath + path)
 }

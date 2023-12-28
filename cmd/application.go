@@ -11,6 +11,8 @@ import (
 type Application interface {
 	// RootDirectory returns the path to the project files, always ending the path with the FileSeparator
 	RootDirectory() string
+	// StorageDirectory returns the path to the storage folder in the project files, always ending the path with the FileSeparator
+	StorageDirectory() string
 	// Separator returns the path separator of the current operational system
 	Separator() string
 	// RunCLI will start the CLI procedures of this application
@@ -43,6 +45,10 @@ func NewApp() Application {
 
 func (app application) RootDirectory() string {
 	return app.rootDir
+}
+
+func (app application) StorageDirectory() string {
+	return app.rootDir + "storage" + app.separator
 }
 
 func (app application) Separator() string {
