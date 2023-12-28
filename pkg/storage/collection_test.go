@@ -2,6 +2,7 @@ package storage_test
 
 import (
 	"context"
+	"encoding/json"
 	"gomarket/cmd"
 	"gomarket/internal/errs"
 	"gomarket/pkg/ctx"
@@ -94,17 +95,204 @@ func Test_Collection_Get(t *testing.T) {
 }
 
 func Test_Collection_List(t *testing.T) {
-	// TODO
+	app := cmd.NewApp()
+	contxt := ctx.CtxWithApp(context.Background(), app)
+	js := storage.NewJsonStorage(contxt)
+	testFiles := map[string]string{
+		"collection_test2.json":            "{\"name\":\"test2\",\"codes\":[1,2],\"next_code\":3}",
+		"collection_test2_registry_1.json": "{\"code\":1,\"name\":\"John\"}",
+		"collection_test2_registry_2.json": "{\"code\":2,\"name\":\"Jane\"}",
+	}
+	type Example struct {
+		Code int    `json:"code"`
+		Name string `json:"name"`
+	}
+	writeTestFiles(t, app, testFiles)
+	collection, err := storage.NewCollection(js, "test2")
+	if err != nil {
+		t.Errorf("could not load collection: %s", err)
+		t.FailNow()
+	}
+
+	t.Run("should list all registries", func(t *testing.T) {
+		// Act
+		raws, err := collection.List(0, 2)
+
+		// Assert
+		assert.Nil(t, err, "err should be nil")
+		assert.Len(t, raws, 2, "raws should have 2 Raw entities")
+		var decoded Example
+		unmarshalErr1 := json.Unmarshal(raws[0], &decoded)
+		assert.Nil(t, unmarshalErr1, "unmarshalErr1 should be nil")
+		assert.Equal(t, "John", decoded.Name, "decoded.Name should be 'John'")
+		unmarshalErr2 := json.Unmarshal(raws[1], &decoded)
+		assert.Nil(t, unmarshalErr2, "unmarshalErr2 should be nil")
+		assert.Equal(t, "Jane", decoded.Name, "decoded.Name should be 'Jane'")
+	})
+
+	t.Run("should list a single registry", func(t *testing.T) {
+		// Act
+		raws, err := collection.List(1, 100)
+
+		// Assert
+		assert.Nil(t, err, "err should be nil")
+		assert.Len(t, raws, 1, "raws should have 1 Raw entity")
+		var decoded Example
+		unmarshalErr1 := json.Unmarshal(raws[0], &decoded)
+		assert.Nil(t, unmarshalErr1, "unmarshalErr1 should be nil")
+		assert.Equal(t, "Jane", decoded.Name, "decoded.Name should be 'Jane'")
+	})
+
+	t.Run("should return a blank list", func(t *testing.T) {
+		// Act
+		raws, err := collection.List(2, 100)
+
+		// Assert
+		assert.Nil(t, err, "err should be nil")
+		assert.Len(t, raws, 0, "raws should be empty")
+	})
+
+	deleteTestFiles(t, app, testFiles)
 }
 
 func Test_Collection_DecodeRaw(t *testing.T) {
-	// TODO
+	app := cmd.NewApp()
+	contxt := ctx.CtxWithApp(context.Background(), app)
+	js := storage.NewJsonStorage(contxt)
+	testFiles := map[string]string{
+		"collection_test3.json":            "{\"name\":\"test3\",\"codes\":[1,2],\"next_code\":3}",
+		"collection_test3_registry_1.json": "{\"code\":1,\"name\":\"John\"}",
+		"collection_test3_registry_2.json": "{\"code\":2,\"name\":\"Jane\"}",
+	}
+	type Example struct {
+		Code int    `json:"code"`
+		Name string `json:"name"`
+	}
+	writeTestFiles(t, app, testFiles)
+	collection, err := storage.NewCollection(js, "test3")
+	if err != nil {
+		t.Errorf("could not load collection: %s", err)
+		t.FailNow()
+	}
+
+	t.Run("should decode entity", func(t *testing.T) {
+		// Act
+		raws, err := collection.List(1, 100)
+		var decoded Example
+		decodeErr := collection.DecodeRaw(raws[0], &decoded)
+
+		// Assert
+		assert.Nil(t, err, "err should be nil")
+		assert.Len(t, raws, 1, "raws should have 1 Raw entity")
+		assert.Nil(t, decodeErr, "decodeErr should be nil")
+		assert.Equal(t, "Jane", decoded.Name, "decoded.Name should be 'Jane'")
+	})
+
+	deleteTestFiles(t, app, testFiles)
 }
 
 func Test_Collection_Save(t *testing.T) {
-	// TODO
+	app := cmd.NewApp()
+	contxt := ctx.CtxWithApp(context.Background(), app)
+	js := storage.NewJsonStorage(contxt)
+	testFiles := map[string]string{
+		"collection_test4.json":            "{\"name\":\"test4\",\"codes\":[1],\"next_code\":2}",
+		"collection_test4_registry_1.json": "{\"code\":1,\"name\":\"John\"}",
+		"collection_test4_registry_2.json": "",
+	}
+	type Example struct {
+		Code int    `json:"code"`
+		Name string `json:"name"`
+	}
+	writeTestFiles(t, app, testFiles)
+	collection, err := storage.NewCollection(js, "test4")
+	if err != nil {
+		t.Errorf("could not load collection: %s", err)
+		t.FailNow()
+	}
+
+	t.Run("should insert a new entity", func(t *testing.T) {
+		// Arrange
+		entity := Example{
+			Code: collection.GetNextCode(),
+			Name: "Jane",
+		}
+
+		// Act
+		err := collection.Save(entity.Code, entity)
+
+		// Assert
+		assert.Nil(t, err, "err should be nil")
+		var stored Example
+		getErr := collection.Get(entity.Code, &stored)
+		assert.Nil(t, getErr, "getErr should be nil")
+		assert.Equal(t, entity.Code, stored.Code, "stored code should be equal to inserted code")
+		assert.Equal(t, entity.Name, stored.Name, "stored name should be equal to inserted name")
+	})
+
+	t.Run("should update an entity", func(t *testing.T) {
+		// Arrange
+		var entity Example
+		err := collection.Get(1, &entity)
+		if err != nil {
+			t.Errorf("could not get entity: %s\n", err)
+			t.FailNow()
+		}
+
+		// Act
+		entity.Name = "John Do"
+		err = collection.Save(entity.Code, entity)
+
+		// Assert
+		assert.Nil(t, err, "err should be nil")
+		var stored Example
+		getErr := collection.Get(entity.Code, &stored)
+		assert.Nil(t, getErr, "getErr should be nil")
+		assert.Equal(t, entity.Code, stored.Code, "stored code should be equal to updated code")
+		assert.Equal(t, "John Do", stored.Name, "stored name should be equal to updated name")
+	})
+
+	deleteTestFiles(t, app, testFiles)
 }
 
 func Test_Collection_Delete(t *testing.T) {
-	// TODO
+	app := cmd.NewApp()
+	contxt := ctx.CtxWithApp(context.Background(), app)
+	js := storage.NewJsonStorage(contxt)
+	testFiles := map[string]string{
+		"collection_test5.json":            "{\"name\":\"test5\",\"codes\":[1],\"next_code\":2}",
+		"collection_test5_registry_1.json": "{\"code\":1,\"name\":\"John\"}",
+	}
+	type Example struct {
+		Code int    `json:"code"`
+		Name string `json:"name"`
+	}
+	writeTestFiles(t, app, testFiles)
+	collection, err := storage.NewCollection(js, "test5")
+	if err != nil {
+		t.Errorf("could not load collection: %s", err)
+		t.FailNow()
+	}
+
+	t.Run("should delete registry 1", func(t *testing.T) {
+		// Act
+		err := collection.Delete(1)
+
+		// Assert
+		assert.Nil(t, err, "err should be nil")
+		raws, listErr := collection.List(0, 10)
+		assert.Nil(t, listErr, "listErr should be nil")
+		assert.Len(t, raws, 0, "raws should be empty")
+	})
+
+	t.Run("should delete registry 2 should result error", func(t *testing.T) {
+		// Act
+		err := collection.Delete(2)
+
+		// Assert
+		assert.Equal(t, errs.RegistryNotFoundErr, err, "err should be RegistryNotFoundErr")
+	})
+
+	delete(testFiles, "collection_test5_registry_1.json")
+	deleteTestFiles(t, app, testFiles)
 }

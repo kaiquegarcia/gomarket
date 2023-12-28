@@ -65,7 +65,7 @@ func (c *collection) Get(code int, dest interface{}) error {
 func (c *collection) List(offset int, limit int) ([]Raw, error) {
 	output := make([]Raw, 0)
 	for index := offset; index < offset+limit && index < len(c.Codes); index++ {
-		var model Raw
+		var model json.RawMessage
 		err := c.storage.Read(
 			c.codePath(c.Codes[index]),
 			&model,
@@ -73,7 +73,7 @@ func (c *collection) List(offset int, limit int) ([]Raw, error) {
 		if err != nil {
 			return nil, err
 		}
-		output = append(output, model)
+		output = append(output, Raw(model))
 	}
 
 	return output, nil
