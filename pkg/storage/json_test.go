@@ -1,9 +1,7 @@
 package storage_test
 
 import (
-	"context"
 	"gomarket/cmd"
-	"gomarket/pkg/ctx"
 	"gomarket/pkg/storage"
 	"os"
 	"testing"
@@ -47,8 +45,7 @@ func deleteTestFiles(
 
 func Test_JsonStorage_Read(t *testing.T) {
 	app := cmd.NewApp()
-	contxt := ctx.CtxWithApp(context.Background(), app)
-	js := storage.NewJsonStorage(contxt)
+	js := storage.NewJsonStorage(app.StorageDirectory())
 	type Example struct {
 		Field string `json:"name"`
 	}
@@ -105,8 +102,7 @@ func Test_JsonStorage_Read(t *testing.T) {
 
 func Test_JsonStorage_Write(t *testing.T) {
 	app := cmd.NewApp()
-	contxt := ctx.CtxWithApp(context.Background(), app)
-	js := storage.NewJsonStorage(contxt)
+	js := storage.NewJsonStorage(app.StorageDirectory())
 	type Example struct {
 		Field string `json:"name"`
 	}
@@ -153,8 +149,7 @@ func Test_JsonStorage_Write(t *testing.T) {
 
 func Test_JsonStorage_Delete(t *testing.T) {
 	app := cmd.NewApp()
-	contxt := ctx.CtxWithApp(context.Background(), app)
-	js := storage.NewJsonStorage(contxt)
+	js := storage.NewJsonStorage(app.StorageDirectory())
 	type Example struct {
 		Field string `json:"name"`
 	}

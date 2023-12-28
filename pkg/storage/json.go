@@ -1,9 +1,7 @@
 package storage
 
 import (
-	"context"
 	"encoding/json"
-	"gomarket/pkg/ctx"
 	"os"
 )
 
@@ -22,12 +20,10 @@ type jsonStorage struct {
 
 // NewJsonStorage initializes an implementation of JsonStorage interface
 func NewJsonStorage(
-	contxt context.Context,
+	basePath string,
 ) JsonStorage {
-	app := ctx.AppFromCtx(contxt)
-
 	return jsonStorage{
-		basePath: app.RootDirectory() + "storage" + app.Separator(),
+		basePath: basePath,
 	}
 }
 

@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"gomarket/internal/errs"
+	"gomarket/internal/repository"
+	"gomarket/pkg/storage"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -20,8 +22,11 @@ type Application interface {
 }
 
 type application struct {
-	rootDir   string
-	separator string
+	rootDir           string
+	separator         string
+	jsonStorage       storage.JsonStorage
+	productCollection storage.Collection
+	productRepository repository.ProductRepository
 }
 
 // NewApp initializes an implementation of Application interface
@@ -37,24 +42,38 @@ func NewApp() Application {
 		dirname += separator
 	}
 
-	return application{
+	app := &application{
 		rootDir:   dirname,
 		separator: separator,
 	}
+
+	app.loadDependencies()
+	return app
 }
 
-func (app application) RootDirectory() string {
+func (app *application) RootDirectory() string {
 	return app.rootDir
 }
 
-func (app application) StorageDirectory() string {
+func (app *application) StorageDirectory() string {
 	return app.rootDir + "storage" + app.separator
 }
 
-func (app application) Separator() string {
+func (app *application) Separator() string {
 	return app.separator
 }
 
-func (app application) RunCLI() {
+func (app *application) RunCLI() {
 	// TODO
+}
+
+func (app *application) loadDependencies() {
+	var err error
+	app.jsonStorage = storage.NewJsonStorage(app.StorageDirectory())
+	app.productCollection, err = storage.NewCollection(app.jsonStorage, "products")
+	if err != nil {
+		panic(errs.DependenciesLoadingErr)
+	}
+
+	app.productRepository = repository.NewProductRepository(app.productCollection)
 }

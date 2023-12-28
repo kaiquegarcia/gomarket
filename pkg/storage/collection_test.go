@@ -1,11 +1,9 @@
 package storage_test
 
 import (
-	"context"
 	"encoding/json"
 	"gomarket/cmd"
 	"gomarket/internal/errs"
-	"gomarket/pkg/ctx"
 	"gomarket/pkg/storage"
 	"os"
 	"testing"
@@ -15,8 +13,7 @@ import (
 
 func Test_Collection_Load(t *testing.T) {
 	app := cmd.NewApp()
-	contxt := ctx.CtxWithApp(context.Background(), app)
-	js := storage.NewJsonStorage(contxt)
+	js := storage.NewJsonStorage(app.StorageDirectory())
 	testFiles := map[string]string{
 		"collection_test_load.json": "{\"name\":\"test_load\",\"codes\":[1,2,3,4],\"next_code\":5}",
 	}
@@ -45,8 +42,7 @@ func Test_Collection_Load(t *testing.T) {
 
 func Test_Collection_Get(t *testing.T) {
 	app := cmd.NewApp()
-	contxt := ctx.CtxWithApp(context.Background(), app)
-	js := storage.NewJsonStorage(contxt)
+	js := storage.NewJsonStorage(app.StorageDirectory())
 	testFiles := map[string]string{
 		"collection_test.json":            "{\"name\":\"test\",\"codes\":[1,2],\"next_code\":3}",
 		"collection_test_registry_1.json": "{\"code\":1,\"name\":\"John\"}",
@@ -96,8 +92,7 @@ func Test_Collection_Get(t *testing.T) {
 
 func Test_Collection_List(t *testing.T) {
 	app := cmd.NewApp()
-	contxt := ctx.CtxWithApp(context.Background(), app)
-	js := storage.NewJsonStorage(contxt)
+	js := storage.NewJsonStorage(app.StorageDirectory())
 	testFiles := map[string]string{
 		"collection_test2.json":            "{\"name\":\"test2\",\"codes\":[1,2],\"next_code\":3}",
 		"collection_test2_registry_1.json": "{\"code\":1,\"name\":\"John\"}",
@@ -157,8 +152,7 @@ func Test_Collection_List(t *testing.T) {
 
 func Test_Collection_DecodeRaw(t *testing.T) {
 	app := cmd.NewApp()
-	contxt := ctx.CtxWithApp(context.Background(), app)
-	js := storage.NewJsonStorage(contxt)
+	js := storage.NewJsonStorage(app.StorageDirectory())
 	testFiles := map[string]string{
 		"collection_test3.json":            "{\"name\":\"test3\",\"codes\":[1,2],\"next_code\":3}",
 		"collection_test3_registry_1.json": "{\"code\":1,\"name\":\"John\"}",
@@ -193,8 +187,7 @@ func Test_Collection_DecodeRaw(t *testing.T) {
 
 func Test_Collection_Save(t *testing.T) {
 	app := cmd.NewApp()
-	contxt := ctx.CtxWithApp(context.Background(), app)
-	js := storage.NewJsonStorage(contxt)
+	js := storage.NewJsonStorage(app.StorageDirectory())
 	testFiles := map[string]string{
 		"collection_test4.json":            "{\"name\":\"test4\",\"codes\":[1],\"next_code\":2}",
 		"collection_test4_registry_1.json": "{\"code\":1,\"name\":\"John\"}",
@@ -257,8 +250,7 @@ func Test_Collection_Save(t *testing.T) {
 
 func Test_Collection_Delete(t *testing.T) {
 	app := cmd.NewApp()
-	contxt := ctx.CtxWithApp(context.Background(), app)
-	js := storage.NewJsonStorage(contxt)
+	js := storage.NewJsonStorage(app.StorageDirectory())
 	testFiles := map[string]string{
 		"collection_test5.json":            "{\"name\":\"test5\",\"codes\":[1],\"next_code\":2}",
 		"collection_test5_registry_1.json": "{\"code\":1,\"name\":\"John\"}",
