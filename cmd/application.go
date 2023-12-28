@@ -13,6 +13,8 @@ type Application interface {
 	RootDirectory() string
 	// Separator returns the path separator of the current operational system
 	Separator() string
+	// RunCLI will start the CLI procedures of this application
+	RunCLI()
 }
 
 type application struct {
@@ -27,8 +29,8 @@ func NewApp() Application {
 		panic(errs.SystemLoadingErr)
 	}
 
-	dirname := filepath.Dir(filename)
 	separator := string(filepath.Separator)
+	dirname := filepath.Dir(filepath.Dir(filename) + separator + ".." + separator)
 	if !strings.HasPrefix(dirname, separator) {
 		dirname += separator
 	}
@@ -45,4 +47,8 @@ func (app application) RootDirectory() string {
 
 func (app application) Separator() string {
 	return app.separator
+}
+
+func (app application) RunCLI() {
+	// TODO
 }

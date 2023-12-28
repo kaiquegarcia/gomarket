@@ -2,7 +2,9 @@ package storage
 
 import (
 	"context"
+	"encoding/json"
 	"gomarket/pkg/ctx"
+	"os"
 )
 
 type JsonStorage interface {
@@ -28,9 +30,19 @@ func NewJsonStorage(
 }
 
 func (js jsonStorage) Read(path string, dest interface{}) error {
-	// TODO
+	bytes, err := os.ReadFile(js.basePath + path)
+	if err != nil {
+		return err
+	}
+
+	return json.Unmarshal(bytes, dest)
 }
 
 func (js jsonStorage) Write(path string, data interface{}) error {
-	// TODO
+	bytes, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(js.basePath+path, bytes, os.ModePerm)
 }
