@@ -135,7 +135,7 @@ func (c *collection) codePath(code int) string {
 
 // collectionPath retrieves the filename of a collection, following the pattern "collection_{name}.json"
 func (c *collection) collectionPath() string {
-	return fmt.Sprintf("collection_%s.json", c.Name)
+	return fmt.Sprintf("collection_%s_index.json", c.Name)
 }
 
 // loadFromStorage will try to retrieve the stored collection data from storage

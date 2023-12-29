@@ -39,7 +39,7 @@ func Test_ProductRepository_Get(t *testing.T) {
 	}
 
 	testFiles := map[string]string{
-		"collection_test_product_repository.json":            "",
+		"collection_test_product_repository_index.json":      "",
 		"collection_test_product_repository_registry_1.json": "",
 		"collection_test_product_repository_registry_2.json": "",
 		"collection_test_product_repository_registry_3.json": "",
@@ -93,7 +93,7 @@ func Test_ProductRepository_List(t *testing.T) {
 	}
 
 	testFiles := map[string]string{
-		"collection_test_product_repository2.json":            "",
+		"collection_test_product_repository2_index.json":      "",
 		"collection_test_product_repository2_registry_1.json": "",
 		"collection_test_product_repository2_registry_2.json": "",
 		"collection_test_product_repository2_registry_3.json": "",
@@ -150,7 +150,7 @@ func Test_ProductRepository_Insert(t *testing.T) {
 	}
 
 	testFiles := map[string]string{
-		"collection_test_product_repository3.json":            "",
+		"collection_test_product_repository3_index.json":      "",
 		"collection_test_product_repository3_registry_1.json": "",
 	}
 
@@ -190,7 +190,7 @@ func Test_ProductRepository_Update(t *testing.T) {
 	}
 
 	testFiles := map[string]string{
-		"collection_test_product_repository4.json":            "",
+		"collection_test_product_repository4_index.json":      "",
 		"collection_test_product_repository4_registry_1.json": "",
 	}
 
@@ -246,7 +246,7 @@ func Test_ProductRepository_Delete(t *testing.T) {
 	}
 
 	testFiles := map[string]string{
-		"collection_test_product_repository5.json": "",
+		"collection_test_product_repository5_index.json": "",
 	}
 
 	r := repository.NewProductRepository(db)
@@ -291,7 +291,7 @@ func Test_ProductRepository_Experience(t *testing.T) {
 	}
 
 	testFiles := map[string]string{
-		"collection_test_product_repository6.json":            "",
+		"collection_test_product_repository6_index.json":      "",
 		"collection_test_product_repository6_registry_1.json": "",
 		"collection_test_product_repository6_registry_2.json": "",
 		"collection_test_product_repository6_registry_3.json": "",
