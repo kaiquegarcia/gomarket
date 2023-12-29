@@ -11,7 +11,7 @@ const (
 	exitWithGenericError
 )
 
-func Main() {
+func main() {
 	app := cmd.NewApp()
 	defer func() {
 		err := recover()

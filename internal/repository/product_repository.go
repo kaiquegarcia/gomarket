@@ -10,6 +10,8 @@ import (
 type ProductRepository interface {
 	// Get will try to retrieve a product from the storage
 	Get(code int) (*entity.Product, error)
+	// Count will retrieve the quantity of products registered on the storage
+	Count() int
 	// List will try to retrieve a list of products from the storage based on the offset and limit defined on arguments
 	List(offset int, limit int) ([]*entity.Product, error)
 	// Insert will try to add a product on the storage
@@ -38,6 +40,10 @@ func (r *productRepository) Get(code int) (*entity.Product, error) {
 	}
 
 	return &dest, nil
+}
+
+func (r *productRepository) Count() int {
+	return r.db.Count()
 }
 
 func (r *productRepository) List(offset int, limit int) ([]*entity.Product, error) {

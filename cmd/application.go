@@ -3,7 +3,9 @@ package cmd
 import (
 	"gomarket/internal/errs"
 	"gomarket/internal/repository"
+	"gomarket/internal/usecases/product"
 	"gomarket/pkg/storage"
+	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -22,11 +24,9 @@ type Application interface {
 }
 
 type application struct {
-	rootDir           string
-	separator         string
-	jsonStorage       storage.JsonStorage
-	productCollection storage.Collection
-	productRepository repository.ProductRepository
+	rootDir         string
+	separator       string
+	productUsecases product.Usecases
 }
 
 // NewApp initializes an implementation of Application interface
@@ -64,16 +64,30 @@ func (app *application) Separator() string {
 }
 
 func (app *application) RunCLI() {
-	// TODO
+	var command string
+	if len(os.Args) > 1 {
+		command = os.Args[1]
+	}
+
+	switch command {
+	case "list":
+		app.productUsecases.List()
+	default:
+		panic(errs.InvalidCommandErr)
+	}
 }
 
 func (app *application) loadDependencies() {
-	var err error
-	app.jsonStorage = storage.NewJsonStorage(app.StorageDirectory())
-	app.productCollection, err = storage.NewCollection(app.jsonStorage, "products")
+	js := storage.NewJsonStorage(app.StorageDirectory())
+	// Collections
+	productCollection, err := storage.NewCollection(js, "test_product_repository6")
 	if err != nil {
 		panic(errs.DependenciesLoadingErr)
 	}
 
-	app.productRepository = repository.NewProductRepository(app.productCollection)
+	// Repositories
+	productRepository := repository.NewProductRepository(productCollection)
+
+	// Usecases
+	app.productUsecases = product.New(productRepository)
 }

@@ -16,6 +16,8 @@ type Collection interface {
 	GetNextCode() int
 	// Get will try to retrieve a single registry from the storage
 	Get(code int, dest interface{}) error
+	// Count will retrieve the number of codes registered on the collection
+	Count() int
 	// List will try to retrieve all registries from the storage. You'll have to decode the element later using the DecodeRaw method
 	List(offset int, limit int) ([]Raw, error)
 	// DecodeRaw will decode an element data retrieved by the List method
@@ -60,6 +62,10 @@ func (c *collection) Get(code int, dest interface{}) error {
 
 	err := c.storage.Read(c.codePath(code), dest)
 	return err
+}
+
+func (c *collection) Count() int {
+	return len(c.Codes)
 }
 
 func (c *collection) List(offset int, limit int) ([]Raw, error) {
