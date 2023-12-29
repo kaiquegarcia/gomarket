@@ -80,7 +80,7 @@ func (app *application) RunCLI() {
 func (app *application) loadDependencies() {
 	js := storage.NewJsonStorage(app.StorageDirectory())
 	// Collections
-	productCollection, err := storage.NewCollection(js, "test_product_repository6")
+	productCollection, err := storage.NewCollection(js, "products")
 	if err != nil {
 		panic(errs.DependenciesLoadingErr)
 	}
