@@ -3,7 +3,7 @@ package cmd
 import (
 	"gomarket/internal/errs"
 	"gomarket/internal/repository"
-	"gomarket/internal/usecases/product"
+	"gomarket/internal/usecases/productcli"
 	"gomarket/pkg/storage"
 	"os"
 	"path/filepath"
@@ -26,7 +26,7 @@ type Application interface {
 type application struct {
 	rootDir         string
 	separator       string
-	productUsecases product.Usecases
+	productUsecases productcli.CLI
 }
 
 // NewApp initializes an implementation of Application interface
@@ -89,5 +89,5 @@ func (app *application) loadDependencies() {
 	productRepository := repository.NewProductRepository(productCollection)
 
 	// Usecases
-	app.productUsecases = product.New(productRepository)
+	app.productUsecases = productcli.NewCLI(productRepository)
 }

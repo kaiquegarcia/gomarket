@@ -7,11 +7,11 @@ import (
 	"gomarket/pkg/util"
 )
 
-func (u *usecases) Create() {
+func (u *cliUsecases) Create() {
 	// TODO
 }
 
-func (u *usecases) createMaterial() int {
+func (u *cliUsecases) createMaterial() int {
 	productDTO := dto.ProductDTO{
 		Materials: make([]entity.Material, 0),
 	}

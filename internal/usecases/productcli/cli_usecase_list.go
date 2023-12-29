@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func (u *usecases) List() {
+func (u *cliUsecases) List() {
 	total := u.repository.Count()
 	if total == 0 {
 		fmt.Println("there's no products to list. please use the 'create' command first")

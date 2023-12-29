@@ -2,7 +2,7 @@ package product
 
 import "gomarket/internal/repository"
 
-type Usecases interface {
+type CLI interface {
 	List()
 	Get()
 	Create()
@@ -10,12 +10,12 @@ type Usecases interface {
 	Delete()
 }
 
-type usecases struct {
+type cliUsecases struct {
 	repository repository.ProductRepository
 }
 
-func New(r repository.ProductRepository) Usecases {
-	return &usecases{
+func NewCLI(r repository.ProductRepository) CLI {
+	return &cliUsecases{
 		repository: r,
 	}
 }
