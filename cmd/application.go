@@ -1,10 +1,12 @@
 package cmd
 
 import (
+	"fmt"
 	"gomarket/internal/errs"
 	"gomarket/internal/repository"
 	"gomarket/internal/usecases/productcli"
 	"gomarket/pkg/storage"
+	"gomarket/pkg/util"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -69,11 +71,23 @@ func (app *application) RunCLI() {
 		command = os.Args[1]
 	}
 
-	switch command {
-	case "list":
+	switch Command(command) {
+	case ListProducts:
 		app.productUsecases.List()
+	case GetProduct:
+		fmt.Println("unimplemented")
+		util.FinishCLI()
+	case CreateProduct:
+		app.productUsecases.Create()
+	case UpdateProduct:
+		fmt.Println("unimplemented")
+		util.FinishCLI()
+	case DeleteProduct:
+		fmt.Println("unimplemented")
+		util.FinishCLI()
 	default:
-		panic(errs.InvalidCommandErr)
+		fmt.Printf("invalid command. please send one of the following commands:\n- %s\n", strings.Join(availableCommands, "\n- "))
+		util.FinishCLI()
 	}
 }
 
