@@ -78,7 +78,7 @@ func (app *application) RunCLI() {
 		case CreateProduct:
 			app.productUsecases.Create()
 		case UpdateProduct:
-			nextCall = "this command is not implemented yet, can you try something else?" + commandsList
+			app.productUsecases.Update()
 		case DeleteProduct:
 			app.productUsecases.Delete()
 		case Exit:
