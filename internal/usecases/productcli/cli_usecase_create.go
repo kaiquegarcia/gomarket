@@ -161,10 +161,8 @@ func (u *cliUsecases) Create() {
 	if err != nil {
 		fmt.Printf("could not register the product. please try again later. check the error:\n%s\n", err.Error())
 	} else {
-		fmt.Printf("product '%s' registered on code #%d successfully", product.Name, product.Code)
+		fmt.Printf("product '%s' registered on code #%d successfully\n", product.Name, product.Code)
 	}
-
-	util.FinishCLI()
 }
 
 func (u *cliUsecases) createMaterial(index int) *entity.Product {
@@ -185,7 +183,7 @@ func (u *cliUsecases) createMaterial(index int) *entity.Product {
 
 func (u *cliUsecases) askMaterialProductID(index int) *entity.Product {
 	knowCode := strings.ToUpper(util.AskCLI(
-		fmt.Sprintf("do you know the product code of the #%d material?", index+1),
+		fmt.Sprintf("do you know the product code of the #%d material? (Y/N)", index+1),
 	)) == "Y"
 
 	var product *entity.Product = nil
@@ -271,6 +269,5 @@ func (u *cliUsecases) askMaterialProductID(index int) *entity.Product {
 		return u.askMaterialProductID(index)
 	}
 
-	util.FinishCLI()
 	panic("")
 }

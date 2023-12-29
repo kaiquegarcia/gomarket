@@ -7,7 +7,6 @@ import (
 	"gomarket/internal/usecases/productcli"
 	"gomarket/pkg/storage"
 	"gomarket/pkg/util"
-	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -66,28 +65,32 @@ func (app *application) Separator() string {
 }
 
 func (app *application) RunCLI() {
-	var command string
-	if len(os.Args) > 1 {
-		command = os.Args[1]
-	}
-
-	switch Command(command) {
-	case ListProducts:
-		app.productUsecases.List()
-	case GetProduct:
-		fmt.Println("unimplemented")
-		util.FinishCLI()
-	case CreateProduct:
-		app.productUsecases.Create()
-	case UpdateProduct:
-		fmt.Println("unimplemented")
-		util.FinishCLI()
-	case DeleteProduct:
-		fmt.Println("unimplemented")
-		util.FinishCLI()
-	default:
-		fmt.Printf("invalid command. please send one of the following commands:\n- %s\n", strings.Join(availableCommands, "\n- "))
-		util.FinishCLI()
+	fmt.Println("welcome to gomarket! your market manager made in golang :)")
+	commandsList := " (" + strings.Join(availableCommands, "/") + ")"
+	command := util.AskCLI("what do you want to do today?" + commandsList)
+	for {
+		switch Command(command) {
+		case ListProducts:
+			app.productUsecases.List()
+			command = util.AskCLI("what do you want to do now?" + commandsList)
+		case GetProduct:
+			command = util.AskCLI("this command is not implemented yet, can you try something else?" + commandsList)
+		case CreateProduct:
+			app.productUsecases.Create()
+			command = util.AskCLI("what do you want to do now?" + commandsList)
+		case UpdateProduct:
+			command = util.AskCLI("this command is not implemented yet, can you try something else?" + commandsList)
+		case DeleteProduct:
+			command = util.AskCLI("this command is not implemented yet, can you try something else?" + commandsList)
+		case Exit:
+			fmt.Println("ok! bye bye")
+			util.FinishCLI()
+			return
+		default:
+			command = util.AskCLI(
+				fmt.Sprintf("invalid command. please send one of the following commands:\n- %s", strings.Join(availableCommands, "\n- ")),
+			)
+		}
 	}
 }
 

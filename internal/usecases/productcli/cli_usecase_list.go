@@ -50,6 +50,4 @@ func (u *cliUsecases) List() {
 
 		offset += limit
 	}
-
-	util.FinishCLI()
 }

@@ -21,6 +21,7 @@ func AskCLI(text string) string {
 func FinishByTooManyErrors() {
 	fmt.Println("I'm sorry, I can't do this anymore")
 	FinishCLI()
+	panic("")
 }
 
 func FinishCLI() {
