@@ -26,6 +26,14 @@ func ProductListErr(err error) string {
 	return fmt.Sprintf(anErrorOccurredWhile, "list products from the storage", err.Error())
 }
 
+func ProductUpdateErr(productCode int, err error) string {
+	return fmt.Sprintf(
+		anErrorOccurredWhile,
+		fmt.Sprintf("update the product #%d", productCode),
+		err.Error(),
+	)
+}
+
 func ProductDeleteErr(productCode int, err error) string {
 	return fmt.Sprintf(
 		anErrorOccurredWhile,
