@@ -6,14 +6,5 @@ I won't use it in any project. If you found anything useful, feel free to use, b
 
 I don't expect to earn anything from this but, just in case, if you want to encourage myself to create more open source projects like this, please send me a coffee:
 
-<div style="display: flex; gap: 12px">+
-    <a href="https://picpay.me/kaiquegarcia.dev/10.0" target="_blank" title="Picpay" style="display: inline-block; height: 48px;">
-        PICPAY
-    </a>
-    <a href="00020126580014br.gov.bcb.pix013667de8cdb-2d60-4f88-b57d-a4bcd0fe8db9520400005303986540510.005802BR5921Kaique Garcia Menezes6009Sao Paulo62070503***63040ED3" target="_blank" title="PIX" style="background: #fff; border-radius: 8px; display: inline-block; padding: 8px; box-sizing: content-box">
-        PIX
-    </a>
-    <a href="https://mpago.la/2rJb27G" target="_blank" title="Mercado Pago" style="display: inline-block; height: 48px;">
-        MERCADO PAGO
-    </a>
-</div>
+- [PICPAY](https://picpay.me/kaiquegarcia.dev/10.0)
+- [MERCADO PAGO](https://mpago.la/2rJb27G)
