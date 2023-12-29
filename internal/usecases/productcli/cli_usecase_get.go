@@ -14,20 +14,20 @@ func (u *cliUsecases) Get() {
 		codeStr := util.AskCLI("what's the product code?")
 		code, err := strconv.Atoi(codeStr)
 		if err != nil {
-			return false, fmt.Sprintf("an error ocurred while trying to decode the product error, please try again. check the error:\n%s", err.Error())
+			return false, errs.ProductCodeDecodingErr(err)
 		}
 
 		if code <= 0 {
-			return false, "please inform a number higher than zero"
+			return false, errs.NumberShouldBeHigherThanZeroErr
 		}
 
 		product, err = u.repository.Get(code)
 		if err == errs.RegistryNotFoundErr {
-			return false, "could not find any product with this code, please change it and try again"
+			return false, errs.ProductNotFoundErr
 		}
 
 		if err != nil {
-			return false, fmt.Sprintf("an error ocurred while trying to retrieve the product from repository, please try again. check the error:\n%s", err.Error())
+			return false, errs.ProductGetErr(code, err)
 		}
 
 		return true, ""
@@ -41,23 +41,14 @@ func (u *cliUsecases) Get() {
 		fmt.Printf("Materials: %d\n", len(product.Materials))
 		for _, material := range product.Materials {
 			productMaterial, err := u.repository.Get(material.ProductCode)
-			if err != nil {
-				fmt.Printf(
-					"- CouldNotRetrieveMaterialName [#%d]: invest $%.2f to buy %.2f%s and use %.2f%s to fabricate a lot ($%.6f per lot)\n",
-					material.ProductCode,
-					float64(material.InvestedCents)/100,
-					material.InvestedAmount,
-					material.Unit,
-					material.AmountToFabricate,
-					material.Unit,
-					material.FabricationCostCents()/100,
-				)
-				continue
+			materialName := "CouldNotRetrieveMaterialName"
+			if err == nil {
+				materialName = productMaterial.Name
 			}
 
 			fmt.Printf(
 				"- %s [#%d]: invest $%.2f to buy %.2f%s and use %.2f%s to fabricate a lot ($%.6f per lot)\n",
-				productMaterial.Name,
+				materialName,
 				material.ProductCode,
 				float64(material.InvestedCents)/100,
 				material.InvestedAmount,

@@ -69,29 +69,30 @@ func (app *application) RunCLI() {
 	commandsList := " (" + strings.Join(availableCommands, "/") + ")"
 	command := util.AskCLI("what do you want to do today?" + commandsList)
 	for {
+		nextCall := "what do you want to do now?" + commandsList
 		switch Command(command) {
 		case ListProducts:
 			app.productUsecases.List()
-			command = util.AskCLI("what do you want to do now?" + commandsList)
 		case GetProduct:
 			app.productUsecases.Get()
-			command = util.AskCLI("what do you want to do now?" + commandsList)
 		case CreateProduct:
 			app.productUsecases.Create()
-			command = util.AskCLI("what do you want to do now?" + commandsList)
 		case UpdateProduct:
-			command = util.AskCLI("this command is not implemented yet, can you try something else?" + commandsList)
+			nextCall = "this command is not implemented yet, can you try something else?" + commandsList
 		case DeleteProduct:
-			command = util.AskCLI("this command is not implemented yet, can you try something else?" + commandsList)
+			app.productUsecases.Delete()
 		case Exit:
-			fmt.Println("ok! bye bye")
+			fmt.Println("ok! bye bye...")
 			util.FinishCLI()
 			return
 		default:
-			command = util.AskCLI(
-				fmt.Sprintf("invalid command. please send one of the following commands:\n- %s", strings.Join(availableCommands, "\n- ")),
+			nextCall = fmt.Sprintf(
+				"invalid command. please send one of the following commands:\n- %s",
+				strings.Join(availableCommands, "\n- "),
 			)
 		}
+
+		command = util.AskCLI(nextCall)
 	}
 }
 

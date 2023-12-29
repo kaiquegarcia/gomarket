@@ -3,7 +3,6 @@ package productcli
 import (
 	"fmt"
 	"gomarket/pkg/util"
-	"strings"
 )
 
 func (u *cliUsecases) List() {
@@ -18,7 +17,7 @@ func (u *cliUsecases) List() {
 	for {
 		list, err := u.repository.List(offset, limit)
 		if err != nil {
-			fmt.Printf("an error happened: %s", err)
+			fmt.Printf("an error happened: %s\n", err)
 			util.PrintLineSeparator()
 			return
 		}
@@ -39,12 +38,12 @@ func (u *cliUsecases) List() {
 		}
 		util.PrintLineSeparator()
 
-		var keepGoing string
+		keepGoing := false
 		if offset+len(list) < total {
-			keepGoing = util.AskCLI("do you want to see the next page? Y/N")
+			keepGoing = util.AskBoolCLI("do you want to see the next page?")
 		}
 
-		if strings.ToUpper(keepGoing) != "Y" {
+		if !keepGoing {
 			break
 		}
 

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gomarket/internal/entity"
 	"gomarket/internal/enum"
+	"gomarket/internal/errs"
 	"gomarket/internal/usecases/dto"
 	"gomarket/pkg/util"
 	"strconv"
@@ -22,11 +23,11 @@ func (u *cliUsecases) Create() {
 
 		amount, err := strconv.Atoi(amountStr)
 		if err != nil {
-			return false, fmt.Sprintf("an error happened while trying to decode the number, can you try again? check the error:\n%s", err.Error())
+			return false, errs.NumberDecodingErr(err)
 		}
 
 		if amount <= 0 {
-			return false, "please inform a number higher than zero"
+			return false, errs.NumberShouldBeHigherThanZeroErr
 		}
 
 		productDTO.QuantityPerLot = amount
@@ -40,11 +41,11 @@ func (u *cliUsecases) Create() {
 		)
 		len, err := strconv.Atoi(lenStr)
 		if err != nil {
-			return false, fmt.Sprintf("an error happened while decoding the number, can you try again?\ncheck the error: %s", err.Error())
+			return false, errs.NumberDecodingErr(err)
 		}
 
 		if len < 0 {
-			return false, "please, inform a number higher or equal than zero"
+			return false, errs.NumberShouldBeHigherOrEqualThanZeroErr
 		}
 
 		materialsLength = len
@@ -54,9 +55,7 @@ func (u *cliUsecases) Create() {
 	productDTO.Materials = make([]entity.Material, materialsLength)
 	for index := range productDTO.Materials {
 		material := entity.Material{}
-		isCreated := strings.ToUpper(util.AskCLI(
-			fmt.Sprintf("is the #%d material registered? (Y/N)", index+1),
-		)) == "Y"
+		isCreated := util.AskBoolCLI(fmt.Sprintf("is the #%d material registered?", index+1))
 
 		var materialProduct *entity.Product
 		if !isCreated {
@@ -73,7 +72,7 @@ func (u *cliUsecases) Create() {
 			))
 
 			if !slices.Contains([]enum.UnitKind{enum.MASS, enum.VOLUME, enum.LENGTH, enum.UNIT}, enum.UnitKind(unit)) {
-				return false, "invalid unit, please try again"
+				return false, errs.InvalidUnitErr
 			}
 
 			material.Unit = enum.UnitKind(unit)
@@ -87,11 +86,11 @@ func (u *cliUsecases) Create() {
 
 			amount, err := strconv.ParseFloat(amountStr, 64)
 			if err != nil {
-				return false, fmt.Sprintf("an error happened while trying to decode the number, can you try again? check the error:\n%s", err.Error())
+				return false, errs.NumberDecodingErr(err)
 			}
 
 			if amount <= 0 {
-				return false, "please inform a number higher than zero"
+				return false, errs.NumberShouldBeHigherThanZeroErr
 			}
 
 			material.AmountToFabricate = enum.Unit(amount)
@@ -105,11 +104,11 @@ func (u *cliUsecases) Create() {
 
 			amount, err := strconv.ParseFloat(amountStr, 64)
 			if err != nil {
-				return false, fmt.Sprintf("an error happened while trying to decode the number, can you try again? check the error:\n%s", err.Error())
+				return false, errs.NumberDecodingErr(err)
 			}
 
 			if amount <= 0 {
-				return false, "please inform a number higher than zero"
+				return false, errs.NumberShouldBeHigherThanZeroErr
 			}
 
 			material.InvestedAmount = enum.Unit(amount)
@@ -123,11 +122,11 @@ func (u *cliUsecases) Create() {
 
 			costCents, err := strconv.Atoi(costCentsStr)
 			if err != nil {
-				return false, fmt.Sprintf("an error happened while trying to decode the number, can you try again? check the error:\n%s", err.Error())
+				return false, errs.NumberDecodingErr(err)
 			}
 
 			if costCents < 0 {
-				return false, "please inform a number higher or equal than zero"
+				return false, errs.NumberShouldBeHigherOrEqualThanZeroErr
 			}
 
 			material.InvestedCents = costCents
@@ -146,11 +145,11 @@ func (u *cliUsecases) Create() {
 
 		sellingPriceCents, err := strconv.Atoi(sellingPriceCentsStr)
 		if err != nil {
-			return false, fmt.Sprintf("an error happened while trying to decode the number, can you try again? check the error:\n%s", err.Error())
+			return false, errs.NumberDecodingErr(err)
 		}
 
 		if sellingPriceCents < 0 {
-			return false, "please inform a number higher or equal than zero"
+			return false, errs.NumberShouldBeHigherOrEqualThanZeroErr
 		}
 
 		productDTO.SellingPriceCents = sellingPriceCents
@@ -182,9 +181,7 @@ func (u *cliUsecases) createMaterial(index int) *entity.Product {
 }
 
 func (u *cliUsecases) askMaterialProductID(index int) *entity.Product {
-	knowCode := strings.ToUpper(util.AskCLI(
-		fmt.Sprintf("do you know the product code of the #%d material? (Y/N)", index+1),
-	)) == "Y"
+	knowCode := util.AskBoolCLI(fmt.Sprintf("do you know the product code of the #%d material?", index+1))
 
 	var product *entity.Product = nil
 	if knowCode {
@@ -194,26 +191,29 @@ func (u *cliUsecases) askMaterialProductID(index int) *entity.Product {
 			)
 			code, err := strconv.Atoi(codeStr)
 			if err != nil {
-				return false, fmt.Sprintf("I could not decode the product code, can you try again?\ndecoding error: %s", err.Error())
+				return false, errs.ProductCodeDecodingErr(err)
 			}
 
 			if code <= 0 {
-				return false, "please, inform a number higher than zero"
+				return false, errs.NumberShouldBeHigherThanZeroErr
 			}
 
 			product, err = u.repository.Get(code)
-			if err != nil {
-				return false, fmt.Sprintf("could not get the product from storage, are you sure this code is right? check the error:\n%s", err.Error())
+			if err == errs.RegistryNotFoundErr {
+				return false, errs.ProductNotFoundErr
 			}
 
-			confirmation := strings.ToUpper(util.AskCLI(
-				fmt.Sprintf("is '%s' the #%d material? (Y/N)", product.Name, index+1),
-			)) == "Y"
+			if err != nil {
+				return false, errs.ProductGetErr(code, err)
+			}
+
+			confirmation := util.AskBoolCLI(fmt.Sprintf("is '%s' the #%d material?", product.Name, index+1))
 
 			if !confirmation {
 				return false, "ok... let's try again"
 			}
 
+			fmt.Printf("ok! adding '%s' as material and moving on\n", product.Name)
 			return true, ""
 		})
 
@@ -230,7 +230,7 @@ func (u *cliUsecases) askMaterialProductID(index int) *entity.Product {
 		for {
 			list, err := u.repository.List(offset, limit)
 			if err != nil {
-				return false, fmt.Sprintf("an error happened, can you try again? check the error:\n%s", err.Error())
+				return false, errs.ProductListErr(err)
 			}
 
 			if len(list) == 0 {
@@ -242,9 +242,7 @@ func (u *cliUsecases) askMaterialProductID(index int) *entity.Product {
 					continue
 				}
 
-				confirmation := strings.ToUpper(util.AskCLI(
-					fmt.Sprintf("is it '%s' (code #%d)? (Y/N)", material.Name, material.Code),
-				)) == "Y"
+				confirmation := util.AskBoolCLI(fmt.Sprintf("is it '%s' (code #%d)?", material.Name, material.Code))
 				if confirmation {
 					product = material
 					return true, ""
@@ -258,12 +256,14 @@ func (u *cliUsecases) askMaterialProductID(index int) *entity.Product {
 	})
 
 	if product != nil {
+		fmt.Printf("ok! adding '%s' as material and moving on\n", product.Name)
 		return product
 	}
 
-	restart := strings.ToUpper(util.AskCLI(
+	restart := util.AskBoolCLI(
 		fmt.Sprintf("could not find any material with this name. do you want to restart the selection flow for the #%d material? (Y/N)\nPS.: if you abort, the entire product creation will be aborted.", index+1),
-	)) == "Y"
+		util.ShouldAppendOptionsToText(false),
+	)
 
 	if restart {
 		return u.askMaterialProductID(index)
