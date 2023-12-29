@@ -9,6 +9,7 @@ type ProductDTO struct {
 	Name              string            `json:"name"`
 	Materials         []entity.Material `json:"materials"`
 	SellingPriceCents int               `json:"selling_price_cents"`
+	QuantityPerLot    int               `json:"quantity_per_lot"`
 }
 
 func (dto ProductDTO) ToEntity(
@@ -23,5 +24,6 @@ func (dto ProductDTO) ToEntity(
 		SellingPriceCents: dto.SellingPriceCents,
 		CreatedAt:         createdAt,
 		UpdatedAt:         updatedAt,
+		QuantityPerLot:    dto.QuantityPerLot,
 	}
 }

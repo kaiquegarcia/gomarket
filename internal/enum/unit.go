@@ -1,7 +1,7 @@
 package enum
 
 // Unit represents an evaluation of quantity of something. It's followed by another data, a string, which is responsible to describe its meaning.
-type Unit float32
+type Unit float64
 
 const (
 	// mass

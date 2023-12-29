@@ -7,4 +7,5 @@ const (
 	MASS   UnitKind = "mg"
 	VOLUME UnitKind = "ml"
 	LENGTH UnitKind = "mm"
+	UNIT   UnitKind = "u"
 )

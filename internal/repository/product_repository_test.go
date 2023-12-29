@@ -3,6 +3,7 @@ package repository_test
 import (
 	"gomarket/cmd"
 	"gomarket/internal/entity"
+	"gomarket/internal/enum"
 	"gomarket/internal/errs"
 	"gomarket/internal/repository"
 	"gomarket/internal/usecases/dto"
@@ -276,6 +277,144 @@ func Test_ProductRepository_Delete(t *testing.T) {
 		// Assert
 		assert.Equal(t, errs.RegistryNotFoundErr, err, "err should be RegistryNotFoundErr")
 	})
+
+	deleteTestFiles(t, app, testFiles)
+}
+
+func Test_ProductRepository_Experience(t *testing.T) {
+	app := cmd.NewApp()
+	js := storage.NewJsonStorage(app.StorageDirectory())
+	db, err := storage.NewCollection(js, "test_product_repository6")
+	if err != nil {
+		t.Errorf("could not initialize test dependencies: %s", err)
+		t.FailNow()
+	}
+
+	testFiles := map[string]string{
+		"collection_test_product_repository6.json":            "",
+		"collection_test_product_repository6_registry_1.json": "",
+		"collection_test_product_repository6_registry_2.json": "",
+		"collection_test_product_repository6_registry_3.json": "",
+		"collection_test_product_repository6_registry_4.json": "",
+		"collection_test_product_repository6_registry_5.json": "",
+		"collection_test_product_repository6_registry_6.json": "",
+		"collection_test_product_repository6_registry_7.json": "",
+		"collection_test_product_repository6_registry_8.json": "",
+		"collection_test_product_repository6_registry_9.json": "",
+	}
+
+	r := repository.NewProductRepository(db)
+	// Recipt
+	r.Insert(dto.ProductDTO{
+		Name:              "Softned Butter",
+		Materials:         make([]entity.Material, 0),
+		SellingPriceCents: 0,
+		QuantityPerLot:    1,
+	})
+	r.Insert(dto.ProductDTO{
+		Name:              "Cocoa Powder",
+		Materials:         make([]entity.Material, 0),
+		SellingPriceCents: 0,
+		QuantityPerLot:    1,
+	})
+	r.Insert(dto.ProductDTO{
+		Name:              "Sugar",
+		Materials:         make([]entity.Material, 0),
+		SellingPriceCents: 0,
+	})
+	r.Insert(dto.ProductDTO{
+		Name:              "Wheat Flour",
+		Materials:         make([]entity.Material, 0),
+		SellingPriceCents: 0,
+		QuantityPerLot:    1,
+	})
+	r.Insert(dto.ProductDTO{
+		Name:              "Baking Powder",
+		Materials:         make([]entity.Material, 0),
+		SellingPriceCents: 0,
+		QuantityPerLot:    1,
+	})
+	r.Insert(dto.ProductDTO{
+		Name:              "Salt",
+		Materials:         make([]entity.Material, 0),
+		SellingPriceCents: 0,
+		QuantityPerLot:    1,
+	})
+	r.Insert(dto.ProductDTO{
+		Name:              "Egg",
+		Materials:         make([]entity.Material, 0),
+		SellingPriceCents: 0,
+		QuantityPerLot:    1,
+	})
+	r.Insert(dto.ProductDTO{
+		Name:              "Milk",
+		Materials:         make([]entity.Material, 0),
+		SellingPriceCents: 0,
+		QuantityPerLot:    1,
+	})
+
+	// Final Product
+	r.Insert(dto.ProductDTO{
+		Name: "Cupcake",
+		Materials: []entity.Material{
+			{ // softened butter
+				ProductCode:       1,
+				AmountToFabricate: 3 * enum.AMERICAN_TABLESPOON,
+				InvestedAmount:    200 * enum.GRAM,
+				InvestedCents:     1190,
+			},
+			{ // cocoa powder
+				ProductCode:       2,
+				AmountToFabricate: 2 * enum.AMERICAN_TABLESPOON,
+				InvestedAmount:    200 * enum.GRAM,
+				InvestedCents:     1500,
+			},
+			{ // suggar
+				ProductCode:       3,
+				AmountToFabricate: 120 * enum.GRAM,
+				InvestedAmount:    1 * enum.KILOGRAM,
+				InvestedCents:     459,
+			},
+			{ // wheat flour
+				ProductCode:       4,
+				AmountToFabricate: 120 * enum.GRAM,
+				InvestedAmount:    1 * enum.KILOGRAM,
+				InvestedCents:     549,
+			},
+			{ // baking powder
+				ProductCode:       5,
+				AmountToFabricate: 2 * enum.GRAM,
+				InvestedAmount:    100 * enum.GRAM,
+				InvestedCents:     579,
+			},
+			{ // salt
+				ProductCode:       6,
+				AmountToFabricate: 0.25 * enum.GRAM,
+				InvestedAmount:    1 * enum.KILOGRAM,
+				InvestedCents:     189,
+			},
+			{ // egg
+				ProductCode:       7,
+				AmountToFabricate: 1,
+				InvestedAmount:    12,
+				InvestedCents:     700,
+			},
+			{ // milk
+				ProductCode:       8,
+				AmountToFabricate: 120 * enum.MILLILITER,
+				InvestedAmount:    1 * enum.LITER,
+				InvestedCents:     700,
+			},
+		},
+		SellingPriceCents: 200,
+		QuantityPerLot:    8,
+	})
+
+	product, err := r.Get(9)
+
+	assert.Nil(t, err, "err should be nil")
+	assert.Equal(t, "Cupcake", product.Name, "name should be 'Cupcake'")
+	assert.Equal(t, 35, product.FabricationCostCents(), "fabricaton cost should be 35 cents")
 
 	deleteTestFiles(t, app, testFiles)
 }
