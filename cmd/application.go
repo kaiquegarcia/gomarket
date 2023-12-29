@@ -74,7 +74,8 @@ func (app *application) RunCLI() {
 			app.productUsecases.List()
 			command = util.AskCLI("what do you want to do now?" + commandsList)
 		case GetProduct:
-			command = util.AskCLI("this command is not implemented yet, can you try something else?" + commandsList)
+			app.productUsecases.Get()
+			command = util.AskCLI("what do you want to do now?" + commandsList)
 		case CreateProduct:
 			app.productUsecases.Create()
 			command = util.AskCLI("what do you want to do now?" + commandsList)
