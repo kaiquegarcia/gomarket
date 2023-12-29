@@ -16,7 +16,6 @@ func Try(maxAttempts int, callable TryableFunc) {
 
 		if attempts >= maxAttempts {
 			FinishByTooManyErrors()
-			panic("")
 		}
 
 		fmt.Println(msg)
