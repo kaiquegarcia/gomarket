@@ -1,4 +1,4 @@
-package product
+package productcli
 
 import (
 	"fmt"
@@ -41,7 +41,7 @@ func (u *cliUsecases) List() {
 
 		var keepGoing string
 		if offset+len(list) < total {
-			keepGoing = util.Ask("do you want to see the next page? Y/N")
+			keepGoing = util.AskCLI("do you want to see the next page? Y/N")
 		}
 
 		if strings.ToUpper(keepGoing) != "Y" {
@@ -51,5 +51,5 @@ func (u *cliUsecases) List() {
 		offset += limit
 	}
 
-	fmt.Println("list products command finished")
+	util.FinishCLI()
 }

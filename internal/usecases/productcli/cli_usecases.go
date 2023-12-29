@@ -1,4 +1,4 @@
-package product
+package productcli
 
 import "gomarket/internal/repository"
 

@@ -15,6 +15,10 @@ type Material struct {
 
 // FabricationCostCents will calculate the cost to use this Material to fabricate a single product, based on the numbers defined in {AmountToFabricate}, {InvestedAmount}, {InvestedCents} and {FabricatedProductCount}
 func (m Material) FabricationCostCents() float64 {
+	if m.InvestedCents == 0 || m.AmountToFabricate == 0 || m.InvestedAmount == 0 {
+		return 0
+	}
+
 	// Math:
 	// CostToFabricateALot <=====> AmountToFabricate
 	// InvestedCents <===========> InvestedAmount
