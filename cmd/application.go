@@ -7,6 +7,7 @@ import (
 	"gomarket/internal/usecases/productcli"
 	"gomarket/pkg/storage"
 	"gomarket/pkg/util"
+	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -48,6 +49,7 @@ func NewApp() Application {
 		separator: separator,
 	}
 
+	app.loadDirectories()
 	app.loadDependencies()
 	return app
 }
@@ -94,6 +96,29 @@ func (app *application) RunCLI() {
 
 		command = util.AskCLI(nextCall)
 	}
+}
+
+func (app *application) loadDirectories() {
+	app.loadStorageDirectory()
+}
+
+func (app *application) loadStorageDirectory() {
+	storageDir := app.StorageDirectory()
+	_, err := os.ReadDir(storageDir)
+	if err == nil {
+		return
+	}
+
+	if os.IsNotExist(err) {
+		err = os.Mkdir(storageDir, os.ModeDir)
+		if err == nil {
+			return
+		}
+
+		panic("could not create storage directory: " + err.Error())
+	}
+
+	panic("could not detect storage directory: " + err.Error())
 }
 
 func (app *application) loadDependencies() {
