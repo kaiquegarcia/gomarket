@@ -1,12 +1,12 @@
 package cmd
 
 import (
-	"fmt"
+	"gomarket/cmd/http/product"
 	"gomarket/internal/errs"
 	"gomarket/internal/repository"
 	"gomarket/internal/usecases/productcli"
+	"gomarket/internal/usecases/producthttp"
 	"gomarket/pkg/storage"
-	"gomarket/pkg/util"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -23,12 +23,16 @@ type Application interface {
 	Separator() string
 	// RunCLI will start the CLI procedures of this application
 	RunCLI()
+	// RunWeb will start the API procedures of this application, serving it immediately with graceful shutdown
+	RunWeb()
 }
 
 type application struct {
-	rootDir         string
-	separator       string
-	productUsecases productcli.CLI
+	rootDir             string
+	separator           string
+	productUsecasesCLI  productcli.CLI
+	productUsecasesHTTP producthttp.HTTP
+	productHandlers     product.Handlers
 }
 
 // NewApp initializes an implementation of Application interface
@@ -66,37 +70,6 @@ func (app *application) Separator() string {
 	return app.separator
 }
 
-func (app *application) RunCLI() {
-	fmt.Println("welcome to gomarket! your market manager made in golang :)")
-	commandsList := " (" + strings.Join(availableCommands, "/") + ")"
-	command := util.AskCLI("what do you want to do today?" + commandsList)
-	for {
-		nextCall := "what do you want to do now?" + commandsList
-		switch Command(command) {
-		case ListProducts:
-			app.productUsecases.List()
-		case GetProduct:
-			app.productUsecases.Get()
-		case CreateProduct:
-			app.productUsecases.Create()
-		case UpdateProduct:
-			app.productUsecases.Update()
-		case DeleteProduct:
-			app.productUsecases.Delete()
-		case Exit:
-			fmt.Println("ok! bye bye...")
-			return
-		default:
-			nextCall = fmt.Sprintf(
-				"invalid command. please send one of the following commands:\n- %s",
-				strings.Join(availableCommands, "\n- "),
-			)
-		}
-
-		command = util.AskCLI(nextCall)
-	}
-}
-
 func (app *application) loadDirectories() {
 	app.loadStorageDirectory()
 }
@@ -132,5 +105,9 @@ func (app *application) loadDependencies() {
 	productRepository := repository.NewProductRepository(productCollection)
 
 	// Usecases
-	app.productUsecases = productcli.NewCLI(productRepository)
+	app.productUsecasesCLI = productcli.NewCLI(productRepository)
+	app.productUsecasesHTTP = producthttp.NewHTTP(productRepository)
+
+	// HTTP Handlers
+	app.productHandlers = product.NewHandlers(app.productUsecasesHTTP)
 }

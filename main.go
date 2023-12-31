@@ -25,5 +25,9 @@ func main() {
 		os.Exit(exitWithSuccess)
 	}()
 
-	app.RunCLI()
+	if len(os.Args) > 1 && os.Args[1] == "serve" {
+		app.RunWeb()
+	} else {
+		app.RunCLI()
+	}
 }

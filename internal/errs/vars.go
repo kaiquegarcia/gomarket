@@ -1,6 +1,10 @@
 package errs
 
-import "fmt"
+import (
+	"fmt"
+	"gomarket/internal/enum"
+	"strings"
+)
 
 var (
 	SystemLoadingErr                  = fmt.Errorf("could not initialize the system")
@@ -9,4 +13,5 @@ var (
 	InvalidDataStoredInContextErr     = fmt.Errorf("the data stored in the current context doesn't have the expected format")
 	RegistryNotFoundErr               = fmt.Errorf("registry not found")
 	InvalidCommandErr                 = fmt.Errorf("invalid command")
+	InvalidUnitValidationErr          = fmt.Errorf("invalid unit, please inform one of the following values as material unit: '%s'", strings.Join(enum.UnitKinds, "' / '"))
 )

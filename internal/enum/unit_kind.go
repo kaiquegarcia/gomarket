@@ -9,3 +9,5 @@ const (
 	LENGTH UnitKind = "mm"
 	UNIT   UnitKind = "u"
 )
+
+var UnitKinds = []string{string(MASS), string(VOLUME), string(LENGTH), string(UNIT)}

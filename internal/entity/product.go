@@ -11,12 +11,12 @@ type Product struct {
 	Name              string     `json:"name"`
 	Materials         []Material `json:"materials"`
 	SellingPriceCents int        `json:"selling_price_cents"`
-	QuantityPerLot    int        `json:"fabricated_products_count"`
+	QuantityPerLot    int        `json:"quantity_per_lot"`
 	CreatedAt         time.Time  `json:"created_at"`
 	UpdatedAt         *time.Time `json:"updated_at"`
 }
 
-// FabricationCostCents will loop all to execute call Material.FabricationCostCents on the materials list, returning its sum
+// FabricationCostCents will loop all to execute call Material.FabricationCostCents on the materials list, returning its sum divided by {product.QuantityPerLot}
 func (p Product) FabricationCostCents() int {
 	if len(p.Materials) == 0 || p.QuantityPerLot == 0 {
 		return 0
