@@ -11,7 +11,7 @@ type UpdateInput struct {
 }
 
 func (u *httpUsecases) Update(ctx context.Context, input UpdateInput) (*entity.Product, error) {
-	dto, err := newProductDTO(input.CreateInput, input.Code)
+	dto, err := u.newProductDTO(input.CreateInput, input.Code)
 	if err != nil {
 		return nil, err
 	}
