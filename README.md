@@ -8,3 +8,29 @@ I don't expect to earn anything from this but, just in case, if you want to enco
 
 - [PICPAY](https://picpay.me/kaiquegarcia.dev/10.0)
 - [MERCADO PAGO](https://mpago.la/2rJb27G)
+
+# How to use
+
+## CLI
+
+Just run `go run .` to start the CLI procedures. You'll see a message with more details.
+
+## Web
+
+Just run `go run . serve` to initialize the web application. Then, download [Postman](https://www.postman.com/) and import the [collection](./gomarket.postman_collection.json) to start sending requests.
+
+## TO-DO List
+
+### Product
+- Add user settings (including option to block access with password - the block should work for both CLI/WEB interfaces);
+- Add product's labor cost;
+- Add profit calculator.
+
+### Technical
+- Add a context-oriented logging system;
+- Add RequestID middleware to automatically inject a requestID on the logging system through `*gin.Context`;
+- Add CORS middleware to validate the origin (pre-requisite for web client);
+- Create a web client for the web API;
+- Add `godoc` for HTTP handlers and install Swagger to provide compilable docs to run with the web API;
+- Add `dotenv` to properly manage environments (e.g. web API's port, etc);
+- Add more options of storage (quit from files, use MongoDB/Firebase/DynamoDB), configured by environment.
