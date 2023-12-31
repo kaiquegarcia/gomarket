@@ -52,7 +52,9 @@ func (u *httpUsecases) newProductDTO(input CreateInput, currentCode int) (*dto.P
 		}
 
 		_, err := u.repository.Get(m.ProductCode)
-		if err != nil {
+		if err == errs.RegistryNotFoundErr {
+			return nil, errs.MaterialNotFoundErr
+		} else if err != nil {
 			return nil, err
 		}
 
