@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "b8654242-ffb3-4294-ba7a-39179cf55b3f",
+		"name": "gomarket",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11087905"
+	},
+	"item": [
+		{
+			"name": "products",
+			"item": [
+				{
+					"name": "full list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/products/?page=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"products",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "detailed product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/products/:code",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"products",
+								":code"
+							],
+							"variable": [
+								{
+									"key": "code",
+									"value": "9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Product Name\",\r\n    \"materials\": [\r\n        {\r\n            \"product_code\": 1,\r\n            \"amount_to_fabricate\": 44.3604,\r\n            \"invested_amount\": 200000,\r\n            \"invested_cents\": 1190,\r\n            \"unit\": \"mg\"\r\n        },\r\n        {\r\n            \"product_code\": 7,\r\n            \"amount_to_fabricate\": 1,\r\n            \"invested_amount\": 12,\r\n            \"invested_cents\": 700,\r\n            \"unit\": \"u\"\r\n        },\r\n        {\r\n            \"product_code\": 8,\r\n            \"amount_to_fabricate\": 120,\r\n            \"invested_amount\": 1000,\r\n            \"invested_cents\": 700,\r\n            \"unit\": \"ml\"\r\n        }\r\n    ],\r\n    \"selling_price_cents\": 80,\r\n    \"quantity_per_lot\": 8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/products/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"products",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update product",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Cupcake\",\r\n    \"materials\": [\r\n        {\r\n            \"product_code\": 1,\r\n            \"amount_to_fabricate\": 44.3604,\r\n            \"invested_amount\": 200000,\r\n            \"invested_cents\": 1190,\r\n            \"unit\": \"mg\"\r\n        },\r\n        {\r\n            \"product_code\": 2,\r\n            \"amount_to_fabricate\": 29.5736,\r\n            \"invested_amount\": 200000,\r\n            \"invested_cents\": 1500,\r\n            \"unit\": \"mg\"\r\n        },\r\n        {\r\n            \"product_code\": 3,\r\n            \"amount_to_fabricate\": 120000,\r\n            \"invested_amount\": 1000000,\r\n            \"invested_cents\": 459,\r\n            \"unit\": \"mg\"\r\n        },\r\n        {\r\n            \"product_code\": 4,\r\n            \"amount_to_fabricate\": 120000,\r\n            \"invested_amount\": 1000000,\r\n            \"invested_cents\": 549,\r\n            \"unit\": \"mg\"\r\n        },\r\n        {\r\n            \"product_code\": 5,\r\n            \"amount_to_fabricate\": 2000,\r\n            \"invested_amount\": 100000,\r\n            \"invested_cents\": 579,\r\n            \"unit\": \"mg\"\r\n        },\r\n        {\r\n            \"product_code\": 6,\r\n            \"amount_to_fabricate\": 250,\r\n            \"invested_amount\": 1000000,\r\n            \"invested_cents\": 189,\r\n            \"unit\": \"mg\"\r\n        },\r\n        {\r\n            \"product_code\": 7,\r\n            \"amount_to_fabricate\": 1,\r\n            \"invested_amount\": 12,\r\n            \"invested_cents\": 700,\r\n            \"unit\": \"u\"\r\n        },\r\n        {\r\n            \"product_code\": 8,\r\n            \"amount_to_fabricate\": 120,\r\n            \"invested_amount\": 1000,\r\n            \"invested_cents\": 700,\r\n            \"unit\": \"ml\"\r\n        }\r\n    ],\r\n    \"selling_price_cents\": 80,\r\n    \"quantity_per_lot\": 8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/products/:code",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"products",
+								":code"
+							],
+							"variable": [
+								{
+									"key": "code",
+									"value": "9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/products/:code",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"products",
+								":code"
+							],
+							"variable": [
+								{
+									"key": "code",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
