@@ -26,7 +26,7 @@ type CreateInputMaterial struct {
 }
 
 func (u *httpUsecases) Create(ctx context.Context, input CreateInput) (*entity.Product, error) {
-	dto, err := newProductDTO(input)
+	dto, err := newProductDTO(input, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func (u *httpUsecases) Create(ctx context.Context, input CreateInput) (*entity.P
 	return u.repository.Insert(*dto)
 }
 
-func newProductDTO(input CreateInput) (*dto.ProductDTO, error) {
+func newProductDTO(input CreateInput, currentCode int) (*dto.ProductDTO, error) {
 	dto := dto.ProductDTO{
 		Name:              input.Name,
 		Materials:         make([]entity.Material, len(input.Materials)),
@@ -45,6 +45,10 @@ func newProductDTO(input CreateInput) (*dto.ProductDTO, error) {
 	for index, m := range input.Materials {
 		if !slices.Contains(enum.UnitKinds, m.Unit) {
 			return nil, errs.InvalidUnitValidationErr
+		}
+
+		if m.ProductCode == currentCode {
+			return nil, errs.MaterialCodeCantBeProductCodeErr
 		}
 
 		dto.Materials[index] = entity.Material{

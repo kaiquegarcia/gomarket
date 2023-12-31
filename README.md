@@ -22,6 +22,7 @@ Just run `go run . serve` to initialize the web application. Then, download [Pos
 ## TO-DO List
 
 ### Product
+- Add support to update a product's materials from CLI;
 - Add user settings (including option to block access with password - the block should work for both CLI/WEB interfaces);
 - Add product's labor cost;
 - Add profit calculator.

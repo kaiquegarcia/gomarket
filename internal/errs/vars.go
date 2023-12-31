@@ -14,4 +14,5 @@ var (
 	RegistryNotFoundErr               = fmt.Errorf("registry not found")
 	InvalidCommandErr                 = fmt.Errorf("invalid command")
 	InvalidUnitValidationErr          = fmt.Errorf("invalid unit, please inform one of the following values as material unit: '%s'", strings.Join(enum.UnitKinds, "' / '"))
+	MaterialCodeCantBeProductCodeErr  = fmt.Errorf("invalid material code, please inform a code different than the product's code")
 )
