@@ -19,7 +19,7 @@ Just run `go run .` to start the CLI procedures. You'll see a message with more 
 
 Just run `go run . serve` to initialize the web application. Then, download [Postman](https://www.postman.com/) and import the [collection](./gomarket.postman_collection.json) to start sending requests.
 
-## TO-DO List
+# TO-DO List
 
 ### Product
 - Add support to update a product's materials from CLI;
