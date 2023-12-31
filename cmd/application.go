@@ -85,7 +85,6 @@ func (app *application) RunCLI() {
 			app.productUsecases.Delete()
 		case Exit:
 			fmt.Println("ok! bye bye...")
-			util.FinishCLI()
 			return
 		default:
 			nextCall = fmt.Sprintf(
