@@ -2,6 +2,7 @@ package repository
 
 import (
 	"gomarket/internal/entity"
+	"gomarket/internal/enum"
 	"gomarket/internal/usecases/dto"
 	"gomarket/pkg/storage"
 	"time"
@@ -60,6 +61,7 @@ func (r *productRepository) List(offset int, limit int) ([]*entity.Product, erro
 			return nil, err
 		}
 
+		r.fixMaterials(&product)
 		list[index] = &product
 	}
 
@@ -105,4 +107,22 @@ func (r *productRepository) Update(code int, dto dto.ProductDTO) (*entity.Produc
 
 func (r *productRepository) Delete(code int) error {
 	return r.db.Delete(code)
+}
+
+// fixMaterials will repair broken Material data (update changes)
+func (r *productRepository) fixMaterials(entity *entity.Product) {
+	if len(entity.Materials) == 0 || entity.Materials[0].InvestUnitID != enum.UnitID(0) {
+		return
+	}
+
+	for index, m := range entity.Materials {
+		unitID := enum.DefaultUnitID(m.Unit)
+		m.FabricationUnitID = unitID
+		m.InvestUnitID = unitID
+		entity.Materials[index] = m
+	}
+
+	now := time.Now()
+	entity.UpdatedAt = &now
+	r.db.Save(entity.Code, entity)
 }

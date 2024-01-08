@@ -29,8 +29,8 @@ type GetOutput struct {
 type GetOutputMaterial struct {
 	Name                   string        `json:"name"`
 	Unit                   enum.UnitKind `json:"unit,omitempty"`
-	AmountToFabricateALot  enum.Unit     `json:"amount_to_fabricate_a_lot"`
-	InvestedAmount         enum.Unit     `json:"invested_amount"`
+	AmountToFabricateALot  enum.Unit     `json:"amount_to_fabricate_a_lot"` // TODO: change to string to properly atattch FabricationUnitID label
+	InvestedAmount         enum.Unit     `json:"invested_amount"`           // TODO: change to string to properly atattch InvestUnitID label
 	InvestedCents          int           `json:"invested_cents"`
 	InvestedMoney          string        `json:"invested_money"`
 	CostToProduceALotCents float64       `json:"cost_to_produce_a_lot_cents"`

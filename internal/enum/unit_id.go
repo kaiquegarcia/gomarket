@@ -1,0 +1,89 @@
+package enum
+
+type UnitID uint
+
+const (
+	MILLIGRAM_ID UnitID = iota + 1
+	GRAM_ID
+	OUNCE_ID
+	POUND_ID
+	KILOGRAM_ID
+	TONNE_ID
+	MILLILITER_ID
+	AMERICAN_TEASPOON_ID
+	AMERICAN_TABLESPOON_ID
+	AMERICAN_LIQUID_OUNCE_ID
+	GLASS_ID
+	AMERICAN_PAINT_ID
+	AMERICAN_LIQUID_QUART_ID
+	LITER_ID
+	AMERICAN_GALLON_ID
+	CUBIC_METER_ID
+	MILLIMETER_ID
+	CENTIMETER_ID
+	INCH_ID
+	FOOT_ID
+	YARD_ID
+	METER_ID
+	KILOMETER_ID
+	MILE_ID
+	UNIT_ID
+)
+
+// GetBaseUnit returns the amount of the specified id
+func GetBaseUnit(id UnitID) Unit {
+	switch id {
+	case MILLIGRAM_ID:
+		return MILLIGRAM
+	case GRAM_ID:
+		return GRAM
+	case OUNCE_ID:
+		return OUNCE
+	case POUND_ID:
+		return POUND
+	case KILOGRAM_ID:
+		return KILOGRAM
+	case TONNE_ID:
+		return TONNE
+	case MILLILITER_ID:
+		return MILLILITER
+	case AMERICAN_TEASPOON_ID:
+		return AMERICAN_TEASPOON
+	case AMERICAN_TABLESPOON_ID:
+		return AMERICAN_TABLESPOON
+	case AMERICAN_LIQUID_OUNCE_ID:
+		return AMERICAN_LIQUID_OUNCE
+	case GLASS_ID:
+		return GLASS
+	case AMERICAN_PAINT_ID:
+		return AMERICAN_PAINT
+	case AMERICAN_LIQUID_QUART_ID:
+		return AMERICAN_LIQUID_QUART
+	case LITER_ID:
+		return LITER
+	case AMERICAN_GALLON_ID:
+		return AMERICAN_GALLON
+	case CUBIC_METER_ID:
+		return CUBIC_METER
+	case MILLIMETER_ID:
+		return MILLIMETER
+	case CENTIMETER_ID:
+		return CENTIMETER
+	case INCH_ID:
+		return INCH
+	case FOOT_ID:
+		return FOOT
+	case YARD_ID:
+		return YARD
+	case METER_ID:
+		return METER
+	case KILOMETER_ID:
+		return KILOMETER
+	case MILE_ID:
+		return MILE
+	case UNIT_ID:
+		return 1
+	}
+
+	return 1
+}

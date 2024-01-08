@@ -11,3 +11,16 @@ const (
 )
 
 var UnitKinds = []string{string(MASS), string(VOLUME), string(LENGTH), string(UNIT)}
+
+func DefaultUnitID(kind UnitKind) UnitID {
+	switch kind {
+	case MASS:
+		return MILLIGRAM_ID
+	case VOLUME:
+		return MILLILITER_ID
+	case LENGTH:
+		return MILLIMETER_ID
+	}
+
+	return UNIT_ID
+}

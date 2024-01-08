@@ -23,6 +23,8 @@ type CreateInputMaterial struct {
 	AmountToFabricate float64 `json:"amount_to_fabricate" form:"amount_to_fabricate" validate:"required,min=0.01"`
 	InvestedAmount    float64 `json:"invested_amount" form:"invested_amount" validate:"required,min=0.01"`
 	InvestedCents     int     `json:"invested_cents" form:"invested_cents" validate:"required,min=1"`
+	// TODO: add FabricationUnitID to allow create/update informing lower numbers (ex: 2L instead of 2000ml)
+	// TODO: add InvestUnitID
 }
 
 func (u *httpUsecases) Create(ctx context.Context, input CreateInput) (*entity.Product, error) {
@@ -58,11 +60,16 @@ func (u *httpUsecases) newProductDTO(input CreateInput, currentCode int) (*dto.P
 			return nil, err
 		}
 
+		kind := enum.UnitKind(m.Unit)
+		unitID := enum.DefaultUnitID(kind)
+		// TODO: receive FabricationUnitID and InvestUnitID from input instead of using default unit ID
 		dto.Materials[index] = entity.Material{
 			ProductCode:       m.ProductCode,
-			Unit:              enum.UnitKind(m.Unit),
+			Unit:              kind,
 			AmountToFabricate: enum.Unit(m.AmountToFabricate),
+			FabricationUnitID: unitID,
 			InvestedAmount:    enum.Unit(m.InvestedAmount),
+			InvestUnitID:      unitID,
 			InvestedCents:     m.InvestedCents,
 		}
 	}
