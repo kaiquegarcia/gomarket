@@ -111,12 +111,12 @@ func (r *productRepository) Delete(code int) error {
 
 // fixMaterials will repair broken Material data (update changes)
 func (r *productRepository) fixMaterials(entity *entity.Product) {
-	if len(entity.Materials) == 0 || entity.Materials[0].InvestUnitID != enum.UnitID(0) {
+	if len(entity.Materials) == 0 || entity.Materials[0].InvestUnitID != enum.UnitID("") {
 		return
 	}
 
 	for index, m := range entity.Materials {
-		unitID := enum.DefaultUnitID(m.Unit)
+		unitID := enum.DefaultUnitIDFromKind(m.UnitKind)
 		m.FabricationUnitID = unitID
 		m.InvestUnitID = unitID
 		entity.Materials[index] = m

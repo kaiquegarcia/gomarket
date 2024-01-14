@@ -23,6 +23,9 @@ func (app *application) RunCLI() {
 			app.productUsecasesCLI.Update()
 		case DeleteProduct:
 			app.productUsecasesCLI.Delete()
+		case RunWeb:
+			app.RunWeb()
+			return
 		case Exit:
 			fmt.Println("ok! bye bye...")
 			return

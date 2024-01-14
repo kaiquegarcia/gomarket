@@ -75,13 +75,16 @@ func (u *cliUsecases) Create() {
 				return false, errs.InvalidUnitErr
 			}
 
-			material.Unit = enum.UnitKind(unit)
+			material.UnitKind = enum.UnitKind(unit)
+			unitID := enum.DefaultUnitIDFromKind(material.UnitKind)
+			material.FabricationUnitID = unitID
+			material.InvestUnitID = unitID
 			return true, ""
 		})
 
 		util.Try(3, func() (bool, string) {
 			amountStr := util.AskCLI(
-				fmt.Sprintf("how many '%s' %s are required to fabricate the product lot?", material.Unit, materialProduct.Name),
+				fmt.Sprintf("how many '%s' %s are required to fabricate the product lot?", material.UnitKind, materialProduct.Name),
 			)
 
 			amount, err := strconv.ParseFloat(amountStr, 64)
@@ -99,7 +102,7 @@ func (u *cliUsecases) Create() {
 
 		util.Try(3, func() (bool, string) {
 			amountStr := util.AskCLI(
-				fmt.Sprintf("how many '%s' %s do you buy at once? e.g.: I buy 1000ml of milk", material.Unit, materialProduct.Name),
+				fmt.Sprintf("how many '%s' %s do you buy at once? e.g.: I buy 1000ml of milk", material.UnitKind, materialProduct.Name),
 			)
 
 			amount, err := strconv.ParseFloat(amountStr, 64)
@@ -117,7 +120,7 @@ func (u *cliUsecases) Create() {
 
 		util.Try(3, func() (bool, string) {
 			costCentsStr := util.AskCLI(
-				fmt.Sprintf("how much cost to buy %.2f%s of %s (in cents)?", material.InvestedAmount, material.Unit, materialProduct.Name),
+				fmt.Sprintf("how much cost to buy %.2f%s of %s (in cents)?", material.InvestedAmount, material.UnitKind, materialProduct.Name),
 			)
 
 			costCents, err := strconv.Atoi(costCentsStr)

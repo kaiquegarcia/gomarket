@@ -57,7 +57,7 @@ func (u *httpUsecases) newGetOutput(p *entity.Product) (*GetOutput, error) {
 		fabricationCostCents := m.FabricationCostCents()
 		materials[index] = GetOutputMaterial{
 			Name:                   mProduct.Name,
-			Unit:                   m.Unit,
+			Unit:                   m.UnitKind,
 			AmountToFabricateALot:  m.AmountToFabricate,
 			InvestedAmount:         m.InvestedAmount,
 			InvestedCents:          m.InvestedCents,

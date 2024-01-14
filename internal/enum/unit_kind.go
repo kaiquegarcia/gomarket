@@ -12,7 +12,7 @@ const (
 
 var UnitKinds = []string{string(MASS), string(VOLUME), string(LENGTH), string(UNIT)}
 
-func DefaultUnitID(kind UnitKind) UnitID {
+func DefaultUnitIDFromKind(kind UnitKind) UnitID {
 	switch kind {
 	case MASS:
 		return MILLIGRAM_ID

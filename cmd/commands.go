@@ -8,6 +8,7 @@ const (
 	CreateProduct Command = "create"
 	UpdateProduct Command = "update"
 	DeleteProduct Command = "delete"
+	RunWeb        Command = "serve"
 	Exit          Command = "exit"
 )
 
@@ -17,5 +18,6 @@ var availableCommands = []string{
 	string(CreateProduct),
 	string(UpdateProduct),
 	string(DeleteProduct),
+	string(RunWeb),
 	string(Exit),
 }

@@ -18,7 +18,7 @@ func Test_ProductDTO_ToEntity(t *testing.T) {
 			Materials: []entity.Material{
 				{
 					ProductCode:       123,
-					Unit:              enum.MASS,
+					UnitKind:          enum.MASS,
 					AmountToFabricate: 120 * enum.GRAM,
 					InvestedCents:     100,
 				},
@@ -50,7 +50,7 @@ func Test_ProductDTO_ToEntity(t *testing.T) {
 			Materials: []entity.Material{
 				{
 					ProductCode:       123,
-					Unit:              enum.MASS,
+					UnitKind:          enum.MASS,
 					AmountToFabricate: 120 * enum.GRAM,
 					InvestedCents:     100,
 				},

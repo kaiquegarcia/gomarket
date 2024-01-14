@@ -1,34 +1,62 @@
 package enum
 
-type UnitID uint
+type UnitID string
 
 const (
-	MILLIGRAM_ID UnitID = iota + 1
-	GRAM_ID
-	OUNCE_ID
-	POUND_ID
-	KILOGRAM_ID
-	TONNE_ID
-	MILLILITER_ID
-	AMERICAN_TEASPOON_ID
-	AMERICAN_TABLESPOON_ID
-	AMERICAN_LIQUID_OUNCE_ID
-	GLASS_ID
-	AMERICAN_PAINT_ID
-	AMERICAN_LIQUID_QUART_ID
-	LITER_ID
-	AMERICAN_GALLON_ID
-	CUBIC_METER_ID
-	MILLIMETER_ID
-	CENTIMETER_ID
-	INCH_ID
-	FOOT_ID
-	YARD_ID
-	METER_ID
-	KILOMETER_ID
-	MILE_ID
-	UNIT_ID
+	MILLIGRAM_ID             UnitID = "milligram"
+	GRAM_ID                  UnitID = "gram"
+	OUNCE_ID                 UnitID = "ounce"
+	POUND_ID                 UnitID = "pound"
+	KILOGRAM_ID              UnitID = "kilogram"
+	TONNE_ID                 UnitID = "tonne"
+	MILLILITER_ID            UnitID = "milliliter"
+	AMERICAN_TEASPOON_ID     UnitID = "american_teaspoon"
+	AMERICAN_TABLESPOON_ID   UnitID = "american_tablespoon"
+	AMERICAN_LIQUID_OUNCE_ID UnitID = "american_liquid_ounce"
+	GLASS_ID                 UnitID = "glass"
+	AMERICAN_PAINT_ID        UnitID = "american_paint"
+	AMERICAN_LIQUID_QUART_ID UnitID = "american_liquid_quart"
+	LITER_ID                 UnitID = "liter"
+	AMERICAN_GALLON_ID       UnitID = "american_gallon"
+	CUBIC_METER_ID           UnitID = "cubic_meter"
+	MILLIMETER_ID            UnitID = "millimeter"
+	CENTIMETER_ID            UnitID = "centimeter"
+	INCH_ID                  UnitID = "inch"
+	FOOT_ID                  UnitID = "foot"
+	YARD_ID                  UnitID = "yard"
+	METER_ID                 UnitID = "meter"
+	KILOMETER_ID             UnitID = "kilometer"
+	MILE_ID                  UnitID = "mile"
+	UNIT_ID                  UnitID = "un"
 )
+
+var UnitIDs = []string{
+	string(MILLIGRAM_ID),
+	string(GRAM_ID),
+	string(OUNCE_ID),
+	string(POUND_ID),
+	string(KILOGRAM_ID),
+	string(TONNE_ID),
+	string(MILLILITER_ID),
+	string(AMERICAN_TEASPOON_ID),
+	string(AMERICAN_TABLESPOON_ID),
+	string(AMERICAN_LIQUID_OUNCE_ID),
+	string(GLASS_ID),
+	string(AMERICAN_PAINT_ID),
+	string(AMERICAN_LIQUID_QUART_ID),
+	string(LITER_ID),
+	string(AMERICAN_GALLON_ID),
+	string(CUBIC_METER_ID),
+	string(MILLIMETER_ID),
+	string(CENTIMETER_ID),
+	string(INCH_ID),
+	string(FOOT_ID),
+	string(YARD_ID),
+	string(METER_ID),
+	string(KILOMETER_ID),
+	string(MILE_ID),
+	string(UNIT_ID),
+}
 
 // GetBaseUnit returns the amount of the specified id
 func GetBaseUnit(id UnitID) Unit {

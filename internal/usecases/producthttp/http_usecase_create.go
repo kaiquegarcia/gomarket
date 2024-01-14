@@ -21,10 +21,10 @@ type CreateInputMaterial struct {
 	ProductCode       int     `json:"product_code" form:"product_code" validate:"required,min=0"`
 	Unit              string  `json:"unit" form:"unit"`
 	AmountToFabricate float64 `json:"amount_to_fabricate" form:"amount_to_fabricate" validate:"required,min=0.01"`
+	FabricationUnitID string  `json:"fabrication_unit_id" form:"fabrication_unit_id" validate:"required"`
 	InvestedAmount    float64 `json:"invested_amount" form:"invested_amount" validate:"required,min=0.01"`
+	InvestUnitID      string  `json:"invest_unit_id" form:"invest_unit_id" validate:"required"`
 	InvestedCents     int     `json:"invested_cents" form:"invested_cents" validate:"required,min=1"`
-	// TODO: add FabricationUnitID to allow create/update informing lower numbers (ex: 2L instead of 2000ml)
-	// TODO: add InvestUnitID
 }
 
 func (u *httpUsecases) Create(ctx context.Context, input CreateInput) (*entity.Product, error) {
@@ -46,7 +46,15 @@ func (u *httpUsecases) newProductDTO(input CreateInput, currentCode int) (*dto.P
 
 	for index, m := range input.Materials {
 		if !slices.Contains(enum.UnitKinds, m.Unit) {
-			return nil, errs.InvalidUnitValidationErr
+			return nil, errs.InvalidUnitKindValidationErr
+		}
+
+		if !slices.Contains(enum.UnitIDs, m.FabricationUnitID) {
+			return nil, errs.InvalidFabricationUnitIDValidationErr
+		}
+
+		if !slices.Contains(enum.UnitIDs, m.InvestUnitID) {
+			return nil, errs.InvalidInvestUnitIDValidationErr
 		}
 
 		if m.ProductCode == currentCode {
@@ -60,16 +68,13 @@ func (u *httpUsecases) newProductDTO(input CreateInput, currentCode int) (*dto.P
 			return nil, err
 		}
 
-		kind := enum.UnitKind(m.Unit)
-		unitID := enum.DefaultUnitID(kind)
-		// TODO: receive FabricationUnitID and InvestUnitID from input instead of using default unit ID
 		dto.Materials[index] = entity.Material{
 			ProductCode:       m.ProductCode,
-			Unit:              kind,
+			UnitKind:          enum.UnitKind(m.Unit),
 			AmountToFabricate: enum.Unit(m.AmountToFabricate),
-			FabricationUnitID: unitID,
+			FabricationUnitID: enum.UnitID(m.FabricationUnitID),
 			InvestedAmount:    enum.Unit(m.InvestedAmount),
-			InvestUnitID:      unitID,
+			InvestUnitID:      enum.UnitID(m.InvestUnitID),
 			InvestedCents:     m.InvestedCents,
 		}
 	}

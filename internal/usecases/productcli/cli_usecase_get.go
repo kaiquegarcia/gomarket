@@ -52,9 +52,9 @@ func (u *cliUsecases) Get() {
 				material.ProductCode,
 				float64(material.InvestedCents)/100,
 				material.InvestedAmount,
-				material.Unit,
+				material.UnitKind,
 				material.AmountToFabricate,
-				material.Unit,
+				material.UnitKind,
 				material.FabricationCostCents()/100,
 			)
 		}

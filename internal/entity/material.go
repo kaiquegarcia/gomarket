@@ -8,7 +8,7 @@ import (
 // Material represents a product required to produce other product. With this struct is possible to calculate the total cost to fabricate a single unit of the product.
 type Material struct {
 	ProductCode       int           `json:"product_code"`
-	Unit              enum.UnitKind `json:"unit"`
+	UnitKind          enum.UnitKind `json:"unit"`
 	FabricationUnitID enum.UnitID   `json:"fabrication_unit_id"`
 	AmountToFabricate enum.Unit     `json:"amount_to_fabricate"`
 	InvestUnitID      enum.UnitID   `json:"invest_unit_id"`
@@ -22,7 +22,7 @@ func (m Material) FabricationCostCents() float64 {
 		return 0
 	}
 
-	baseUnitID := enum.DefaultUnitID(m.Unit)
+	baseUnitID := enum.DefaultUnitIDFromKind(m.UnitKind)
 	baseAmountToFabricate := util.Convert(m.AmountToFabricate, m.FabricationUnitID, baseUnitID)
 	baseInvestedAmount := util.Convert(m.InvestedAmount, m.InvestUnitID, baseUnitID)
 	// Math:
