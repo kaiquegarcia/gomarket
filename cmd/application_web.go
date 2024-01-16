@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	route "gomarket/cmd/http"
+	"gomarket/pkg/middlewares"
 	"net/http"
 	"os/signal"
 	"syscall"
@@ -19,7 +20,7 @@ func (app *application) RunWeb() {
 	defer stop()
 
 	engine := gin.New()
-	// TODO: CORS middleware
+	engine.Use(middlewares.CORS())
 	// TODO: requestID middleware
 	// TODO: logging
 	engine = route.SetupRoutes(engine, app.productHandlers)
